@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% load static %}
+
+{% block menu %}
+
+{% include "navbar.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="content">
+
+  <h2>{{view_texts.qfinder.main_title}}</h2>
+
+  <h4>{{view_texts.qfinder.sub_title}}</h4>
+
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    <div class="form-group">
+      <input class="form-control" type="file" name="myfile">
+    </div>
+
+    <button type="submit" class="btn btn-success">{{view_texts.qfinder.submit}}</button>
+
+  </form>
+
+  <div class="content-items">
+  {% if quoted_materials %}
+
+      <table class="table table-dark">
+          <thead>
+            <tr>
+                <th scope="col">Itemcode</th>
+                <th scope="col">Project</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Unit</th>
+            </tr>
+          </thead>
+        <tbody>
+            <tr>
+            {% for material in quoted_materials %}
+            <tr>
+                <td>{{ material.itemcode }}</td> <td>{{ material.project }}</td> <td>{{ material.price }}</td> <td>{{ material.unit }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+  {% endif %}
+  </div>
+
+  {% if error_message %}
+      <p> {{ error_message }} </p>
+  {% endif %}
+
+  {% block instructions %}
+    {% include "instructions.html" %}
+  {% endblock %}
+
+</div>
+
+{% endblock %}
